@@ -5,7 +5,7 @@
       "type": "Feature",
       "properties": {
         "CODE": "NO",
-        "CNTRY_NAME": "Norway"
+        "COUNTRY": "Norway"
       },
       "geometry": {
         "type": "MultiPolygon",
