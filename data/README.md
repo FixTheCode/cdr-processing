@@ -2,7 +2,6 @@ This directory contains several GeoJSON files representing the geographic bounda
 
 | ISO Code |     Country     |  Number of coordinates |
 |----------|-----------------|------------------------|
-| IT       |  Italy          |  9 coordinates         |
 | AT       |  Austria        |  648 coordinates       |
 | BE       |  Belgium        |  406 coordinates       |
 | CA       |  Canada         |  33084 coordinates     |
