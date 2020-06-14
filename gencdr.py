@@ -143,7 +143,7 @@ def main():
                 '"' + str(random.choice(data.operators)) + '",' +
                 '"' + str(random.randrange(1, 10)) + '",' +
                 '"' + str(uuid.uuid4()) + '",' +
-                '"' + str(i) + ",'" +
+                '"' + str(i) + '",' +
                 '"' + str(x0) + '",' +
                 '"' + str(y0) + '"'
             )
