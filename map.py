@@ -22,36 +22,54 @@ import geo
 def main():
 
     def get_property(name: str, value: str, last=False) -> str:
-        # returns a GeoJSON property field. apply a different format if the
-        # field is the last one
+        """
+        returns a GeoJSON property field. apply a different format if the
+        field is the last one
+
+        """
         response = '"' + name + '":"' + value + '"'
         if last:
             response += '},'
         else:
             response += ','
-        return (response)
+        return (response.strip('\n'))
 
     def get_geometry(x0: float, y0: float, last=False) -> str:
-        # returns a GeoJSON geometry field. apply a different format if the
-        # field is the last one
+        """
+        returns a GeoJSON geometry field. apply a different format if the
+        field is the last one
+
+        """
         response = '"geometry": {"type":"Point","coordinates": [' + \
             y0 + ',' + x0 + ']}}'
         if not last:
             response += ','
-        return (response)
+        return (response.strip('\n'))
 
     def validate_file(file_name: str, x: int, y: int):
-        # validate that the field positions specified on the command line are
-        # valid and that each coordinate at the specified positions are valid
-        # WGS 84 format
+        """
+        validate that the field positions specified on the command line are
+        valid and that each coordinate at the specified positions are valid
+        WGS 84 format
+
+        """
         invalid_rows = ''
+
+        # TODO fix uk.geojson polygon around portsmouth
+
+        # check if file is encoded as expected
+        if '\0' in open(file_name).read():
+            print('error: input file is not ASCII or ANSI encoded.')
+            sys.exit(-1)
+
         f = open(file_name, 'r')
         reader = csv.DictReader(f)
         fields = reader.fieldnames
         for row in reader:
+            # print(row)
             try:
-                a = int(x, 10)
-                b = int(y, 10)
+                a = int(x, 10) - 1
+                b = int(y, 10) - 1
             except ValueError:
                 print('error: -x and -y must be integers.')
                 sys.exit(-1)
@@ -80,10 +98,13 @@ def main():
             print(invalid_rows)
             sys.exit(-1)
 
-    # open specified csv file to process and scan to check that all the geo
-    # coordinates are valid. if validation passes we have a file with valid
-    # WGS 84 format coordinates and we will be able to output a GeoJSON
-    # representation
+    """
+    open specified csv file to process and scan to check that all the geo
+    coordinates are valid. if validation passes we have a file with valid
+    WGS 84 format coordinates and we will be able to output a GeoJSON
+    representation
+
+    """
     validate_file(args.i, args.x, args.y)
     try:
         f = open(args.i, 'r')
@@ -95,13 +116,17 @@ def main():
         raise SystemExit(
             f'File ' + args.i + ' not found.')
 
-    # create GeoJSON from the input file.  coordinate fields are skipped when
-    # creating the properties for a row and used to create the geometry section
-    # once all other fields  have been processed
+    """
+    create GeoJSON from the input file.  coordinate fields are skipped when
+    creating the properties for a row and used to create the geometry section
+    once all other fields have been processed.  GeoJSON requires the
+    coordinates ordered as longitude, latitude
+
+    """
     output = '{"type": "FeatureCollection","features": ['
     header = rawData.fieldnames
-    x = (int(args.x, 10))
-    y = (int(args.y, 10))
+    x = (int(args.x, 10)) - 1
+    y = (int(args.y, 10)) - 1
     for row in rawData:
         x0 = row[header[x]]
         y0 = row[header[y]]
@@ -122,11 +147,15 @@ def main():
                                        row[header[current_field]])
             current_field += 1
         current_field = 0
-    output += ']}'
+    output += ']}\n'
 
-    # output a formatted or minimised geoJSON file. it is possible that the
-    # incorrect specified field positions for coordinates return a valid type
-    # that results in a malfored string.
+    """
+    output a formatted or minimised GeoJSON file. it is possible that the
+    incorrect specified field positions for coordinates return a valid type
+    that results in a malfored string.
+
+    """
+
     if not args.m:
         try:
             parsed = json.loads(output)
@@ -161,4 +190,5 @@ if __name__ == '__main__':
         metavar="INT",
         help='position of longitude field in file')
     args = parser.parse_args()
+
     main()
