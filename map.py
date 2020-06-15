@@ -55,8 +55,6 @@ def main():
         """
         invalid_rows = ''
 
-        # TODO fix uk.geojson polygon around portsmouth
-
         # check if file is encoded as expected
         if '\0' in open(file_name).read():
             print('error: input file is not ASCII or ANSI encoded.')
