@@ -1,5 +1,7 @@
 # cdr-processing
-A set of python scripts to simulate telecoms call detail record (CDR) creation and processing. No third party packages have been used. The CDR file created is structured as follows, will all field enclosed in double quotes.
+A set of python scripts to simulate telecoms call detail record (CDR) creation and processing. Developed using Python 3.8.3 and with minimal use of third party packages.  The aim of this project is to code everything in Python to keep the codebase small and to demonstrate how much functionality we can achieve with minimal amount of code.
+
+The CDR file created is structured as follows, will all fields enclosed in double quotes.
 
 | Field                    | Description              | Example                               |
 |--------------------------|--------------------------|---------------------------------------|
@@ -20,7 +22,7 @@ A set of python scripts to simulate telecoms call detail record (CDR) creation a
 
 ## gencdr.py
 
-This creates a user specified number of random call detail records.  A small number of records are created for a single calling phone with random geographic coordinates to simulate caller movement.  This is based on a provided latitude and longitude with each subsequent record randomised to be located within a five-mile radius of the previous record.
+This creates a user specified number of random call detail records.  A small number of records are created for a single calling phone with random geographic coordinates to simulate caller movement.  This is based on a provided latitude and longitude with each subsequent record randomised to be located within a five-mile radius of the previous record.  If a GeoJSON file is provided that represent a geographic boundary the random locations will be constrained to be within that boundary.  A set of GeoJSON files representing different countries are filed under the data folder.
 
 The header row would be:
 ```
@@ -37,7 +39,7 @@ Supporting data for the gencdr.py script.  Data includes a list of mobile operat
 
 ## geo.py
 
-Utility functions that perform the geo randomisation, validation and calculate the distance between locations
+Utility functions that perform the geo randomisation, validation and calculate the distance between locations.
 
 ## map.py
 
