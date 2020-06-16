@@ -104,6 +104,7 @@ def is_within_boundary(lat: float, lng: float, poly: list) -> bool:
                     if float(x0) == float(x1) or float(
                             lat) <= float(xinters):
                         result = not result
+                        return result
         x0, y0 = x1, y1
 
     return result
