@@ -33,7 +33,7 @@ def get_random_location(x0: float, y0: float, meters: int):
         y = w * np.sin(t)
         # cater for lat longs being in degrees by shrinking the the east-west
         # distances
-        x1 = x / np.cos(y0)
+        x1 = x / np.cos(y0 * (np.pi / 180))
     return (float('%.6f' % (x0 + x1)), float('%.6f' % (y0 + y)))
 
 
