@@ -72,27 +72,27 @@ def main():
         orig_x = x0
         orig_y = y0
 
+        meters = int(miles) * 1610
+        if (geojson):
+            boundary_coords = geo.extract_geojson_coordinates(geojson)
+
         phone_to_track = get_random_phone_number()
         network = random.choice(data.operators)
         for i in range(int(records)):
-
             if (geojson):
-                boundary_coords = geo.extract_geojson_coordinates(
-                    geojson)
+                while not geo.is_within_boundary(
+                        float(x0), float(y0), boundary_coords):
+                    x0, y0 = geo.get_random_location(
+                        orig_x, orig_y, meters)
+            else:
                 x0, y0 = geo.get_random_location(
-                    float(x0), float(y0), 8000)
-                if (geojson):
-                    while not geo.is_within_boundary(
-                            float(x0), float(y0), boundary_coords):
-                        x0, y0 = geo.get_random_location(
-                            orig_x, orig_y, 8000)
+                    float(x0), float(y0), meters)
 
             random_date = get_random_date(
                 datetime.now() - timedelta(30),
                 datetime.now() +
                 timedelta(days=30))
-            """approximate conversion of miles to meters"""
-            x0, y0 = geo.get_random_location(x0, y0, 8000)
+
             print(
                 '"M",' +
                 '"' + str(phone_to_track) + '",' +
@@ -173,6 +173,7 @@ def main():
         ''' ensure the specified coordinate are within the specified boundary '''
         if (args.b):
             boundary_coords = geo.extract_geojson_coordinates(args.b)
+            print(str(x0) + ',' + str(y0))
             if not geo.is_within_boundary(
                     float(x0),
                     float(y0),
@@ -189,7 +190,8 @@ def main():
     try:
         print_header()
         if (args.t):
-            get_random_location_tracking(x0, y0, 8000, args.t, args.b)
+            get_random_location_tracking(
+                x0, y0, args.m, args.t, args.b)
 
         get_random_cdr_data(args.n, x0, y0, args.b)
     except (ValueError):
@@ -209,6 +211,10 @@ if __name__ == '__main__':
         '-t',
         metavar='INT',
         help='number of tracking records to create')
+    parser.add_argument(
+        '-m',
+        metavar='INT',
+        help='number of miles for radius')
     parser.add_argument(
         '-c',
         required=False,
