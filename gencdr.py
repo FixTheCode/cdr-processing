@@ -79,14 +79,13 @@ def main():
         phone_to_track = get_random_phone_number()
         network = random.choice(data.operators)
         for i in range(int(records)):
+            x0, y0 = geo.get_random_location(
+                float(x0), float(y0), meters)
             if (geojson):
                 while not geo.is_within_boundary(
                         float(x0), float(y0), boundary_coords):
                     x0, y0 = geo.get_random_location(
                         orig_x, orig_y, meters)
-            else:
-                x0, y0 = geo.get_random_location(
-                    float(x0), float(y0), meters)
 
             random_date = get_random_date(
                 datetime.now() - timedelta(30),
